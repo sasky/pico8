@@ -1,18 +1,20 @@
 --todo:
--- refactor code
--- title screen (with charactor selection)
--- score system
--- list of hiding places for each player
----- randomly assigned when game begins
 
--- work more on the floor plan
+-- get chars walking again
+-- colision detechtion
+---- each player will need a smaller hitbox for collision detetion
+-- hiding places overally
+
 -- hook up mummy
 -- hidden people (x, y on map)
+-- list of hiding places for each player
+---- randomly assigned when game begins
 ---- will need a list of x,y hiding places
 ---- assign the hiding
 -- look action // when the look button is pressed, checks pixels around the player for a hidden sqare
--- colision detechtion
----- each player will need a smaller hitbox for collision detetion
+
+-- score system
+-- game over win /loose screen
 
 function _init()
     state = 'title'
@@ -26,8 +28,9 @@ function _init()
         --title screen
         --player selection
         add(players, init_player('arla', 8, 0, 12, 16, 10, 90 - 16, 'title'))
-        add(players, init_player('phoebe', 0, 16, 14, 14, 40, 90 - 14, 'title'))
+        add(players, init_player('phoebe', 1, 16, 13, 14, 40, 90 - 14, 'title'))
         add(players, init_player('daddy', 56, 0, 17, 32, 70, 90 - 32, 'title'))
+        add(players, init_player('mummy', 56, 0, 17, 32, 70, 90 - 32, 'title'))
     elseif state == 'play' then
         -- add the players
     elseif state == 'end' then
@@ -61,7 +64,7 @@ function _update()
                 -- set up game
                 for i, p in pairs(players) do
                     if i == selected then
-                        p:start("active")
+                        p:start("play")
                     else
                         p:start("hide")
                     end
@@ -105,7 +108,8 @@ function _draw()
         drawPlayers()
         -- hiding places
         -- couch
-        map(9, 4, 9 * 8, 4 * 8, 3, 6)
+        -- map(9, 4, 9 * 8, 4 * 8, 3, 6)
+
     elseif state == 'end' then
         -- if won or lost
         -- play again ?

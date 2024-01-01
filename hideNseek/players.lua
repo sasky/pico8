@@ -1,9 +1,9 @@
 function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
-    s = s or 2
+    s = s or 1
     -- if state is hide
     if state == 'title' then
     elseif state == 'hide' then
-    elseif state == 'active' then
+    elseif state == 'play' then
         ---- then assign x,y to starting coords
     end
 
@@ -31,51 +31,46 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
         update = function(self)
             self.vx = 0
             self.vy = 0
+            -- printh("player update: " .. self.state, 'debug.log', false)
 
             -- bounds
             -- check if
             -- movement
-            if state == 'active' then
-                if btn(0) and self:canMove() then
-                    -- left
-                    self.vx = -self.s
-                    self:walk()
-                end
-                -- if btnp(1) then
-                if btn(1) and self:canMove() then
-                    -- and canMove(p.x + 12 + 2, p.y) then
-                    -- right
-                    self.vx = self.s
-                    self:walk()
-                end
-                if btn(2) and self:canMove() then
-                    -- and canMove(p.x, p.y - 2) then
-                    -- up
-                    self.vy = -self.s
-                    self:walk()
-                end
-                if btn(3) and self:canMove() then
-                    -- and canMove(p.x, p.y + 16 + 2) then
-                    -- down
-                    self.vy = self.s
-                    self:walk()
+            if self.state == 'play' then
+                if self:canMove() then
+                    if btn(0)  then
+                        -- left
+                        self.vx = -self.s
+                        self:walk()
+                    elseif btn(1) then
+                        -- and canMove(p.x + 12 + 2, p.y) then
+                        -- right
+                        self.vx = self.s
+                        self:walk()
+                    elseif btn(2) then
+                        -- and canMove(p.x, p.y - 2) then
+                        -- up
+                        self.vy = -self.s
+                        self:walk()
+                    elseif btn(3) then
+                        -- and canMove(p.x, p.y + 16 + 2) then
+                        -- down
+                        self.vy = self.s
+                        self:walk()
+                    end
                 end
 
                 if btnp(5) then
                     self:look()
                 end
-            end
-            if state == "reveal" then
+            elseif self.state == "reveal" then
                 -- todo, step though the reveal animation
-            end
-            if state == "found" then
+            elseif self.state == "found" then
                 -- just stand there, maybe follow the active player
                 -- once I watch that AI course
-            end
-            if state == "hide" then
+            elseif self.state == "hide" then
                 -- just hide I think
-            end
-            if state == "title" then
+            elseif self.state == "title" then
                 -- just hide I think
             end
             self.x += self.vx
@@ -84,10 +79,17 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
         draw = function(self)
             sspr(self.pxf, self.py, self.w, self.h, self.x, self.y, self.w, self.h, self.vx < 0)
             if (self.state == "title_selected") rect(self.x - 2, self.y - 2, self.x + self.w + 2, self.y + self.h + 2, 3)
+            local hitbox = {
+                x0 = self.x + ((self.w/2)-4),
+                y0 = self.y + (self.h) -8,
+                x1 = self.x + ((self.w/2)+4),
+                y1 = self.y + self.h,  
+            }
+            -- rect(hitbox.x0,hitbox.y0,hitbox.x1,hitbox.y1, 6)
         end,
         walk = function(self)
-            if self.state == 'active' then
-                self.t += self.w / 2
+            if self.state == 'play' then
+                self.t += self.w/2
                 local max = self.px + self.w * 3
 
                 if self.t % (self.w + self.px) == 0 then
@@ -95,6 +97,7 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
                 end
                 if self.pxf >= max then
                     self.pxf = self.px
+                    -- self.t =  self.px
                 end
             end
         end,
@@ -115,7 +118,7 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
             return true
         end,
         start = function(self, state)
-            if state == 'active' then
+            if state == 'play' then
                 self.x = 16
                 self.y = 20
             elseif state == 'hide' then
