@@ -27,10 +27,45 @@ function _init()
     if state == 'title' then
         --title screen
         --player selection
-        add(players, init_player('arla', 8, 0, 12, 16, 10, 90 - 16, 'title'))
-        add(players, init_player('phoebe', 1, 16, 13, 14, 40, 90 - 14, 'title'))
-        add(players, init_player('daddy', 56, 0, 17, 32, 70, 90 - 32, 'title'))
-        add(players, init_player('mummy', 56, 0, 17, 32, 70, 90 - 32, 'title'))
+        add(players, init_player('arla', 8, 0, 12, 16, 10, 90 - 16, {
+            -- daddy hiding places
+            { x = 47, y = 24, toX = 63, toY = 24 },
+            { x = 47, y = 41, toX = 47, toY = 24 },
+            { x = 58, y = 97, toX = 58, toY = 62 },
+            { x = 111, y = 78, toX = 95, toY = 78 },
+            { x = 86, y = 39, toX = 104, toY = 39 },
+            { x = 1, y = 32, toX = 16, toY = 32 },
+        }))
+        add(players, init_player('phoebe', 1, 16, 13, 14, 40, 90 - 14, {
+            -- daddy hiding places
+            { x = 47, y = 24, toX = 63, toY = 24 },
+            { x = 47, y = 41, toX = 47, toY = 24 },
+            { x = 58, y = 97, toX = 58, toY = 62 },
+            { x = 111, y = 78, toX = 95, toY = 78 },
+            { x = 86, y = 39, toX = 104, toY = 39 },
+            { x = 1, y = 32, toX = 16, toY = 32 },
+        }))
+
+        add(players, init_player('daddy', 56, 0, 17, 32, 70, 90 - 32, {
+            -- daddy hiding places
+            { x = 47, y = 24, toX = 63, toY = 24 },
+            { x = 47, y = 41, toX = 47, toY = 24 },
+            { x = 58, y = 97, toX = 58, toY = 62 },
+            { x = 111, y = 78, toX = 95, toY = 78 },
+            { x = 86, y = 39, toX = 104, toY = 39 },
+            { x = 1, y = 32, toX = 16, toY = 32 },
+        }))
+
+        -- add(players, init_player('mummy', 56, 0, 17, 32, 70, 90 - 32,{
+        --     -- daddy hiding places
+        --     { x = 47, y = 24, toX = 63, toY = 24 },
+        --     { x = 47, y = 41, toX = 47, toY = 24 },
+        --     { x = 58, y = 97, toX = 58, toY = 62 },
+        --     { x = 111, y = 78, toX = 95, toY = 78 },
+        --     { x = 86, y = 39, toX = 104, toY = 39 },
+        --     { x = 1, y = 32, toX = 16, toY = 32 },
+        -- }))
+
     elseif state == 'play' then
         -- add the players
     elseif state == 'end' then
@@ -109,6 +144,10 @@ function _draw()
         -- hiding places
         -- couch
         -- map(9, 4, 9 * 8, 4 * 8, 3, 6)
+
+        -- scores
+        rectfill(0 ,112, 127, 127,9)
+        print('looks left: ' ..looks, 5, 120, 7)
 
     elseif state == 'end' then
         -- if won or lost

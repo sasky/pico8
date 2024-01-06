@@ -1,28 +1,26 @@
-hidingPlaces = {
-    {x = 0, y= 0 ,toX = 0, toY = 0},
-    {x = 0, y= 0 ,toX = 0, toY = 0},
-    {x = 0, y= 0 ,toX = 0, toY = 0},
-
-}
-function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
+-- hidingPlaces = {
+--     -- daddy hiding places
+--     { x = 47, y = 24, toX = 63, toY = 24 },
+--     { x = 47, y = 41, toX = 47, toY = 24 },
+--     { x = 58, y = 97, toX = 58, toY = 62 },
+--     { x = 111, y = 78, toX = 95, toY = 78 },
+--     { x = 86, y = 39, toX = 104, toY = 39 },
+--     { x = 1, y = 32, toX = 16, toY = 32 },
+-- }
+function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
     s = s or 1
-    -- if state is hide
-    if state == 'title' then
-    elseif state == 'hide' then
-    elseif state == 'play' then
-        ---- then assign x,y to starting coords
-    end
 
     return {
         -- constants
         name = name,
+        hidingPlaces = hidingPlaces,
         -- pixel map
         px = px,
         py = py,
         w = w,
         h = h,
         -- state
-        state = state,
+        state = 'title',
         -- move state vars
         x = x,
         y = y,
@@ -34,6 +32,8 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
         pxf = px,
         -- timer
         t = px,
+        -- look circle raduis
+        cr = 4,
         update = function(self)
             self.vx = 0
             self.vy = 0
@@ -44,6 +44,7 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
             -- bounds
             -- check if
             -- movement
+            -- Active states
             if self.state == 'play' then
                 if btn(0) then
                     -- left
@@ -69,6 +70,13 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
                 if btnp(5) then
                     self:look()
                 end
+            elseif self.state == 'looking' then
+                self.cr += self.s
+                if self.cr > 14 then
+                    self.state = 'play'
+                    self.cr = 4
+                end
+                -- Hiding States
             elseif self.state == "reveal" then
                 -- todo, step though the reveal animation
             elseif self.state == "found" then
@@ -91,6 +99,7 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
             if (self.state == "title_selected") rect(self.x - 2, self.y - 2, self.x + self.w + 2, self.y + self.h + 2, 3)
             -- local hitbox = self:getHitBox()
             -- rect(hitbox.x0, hitbox.y0, hitbox.x1, hitbox.y1, 6)
+            if (self.state == 'looking') circ(self.x + self.w / 2, self.y + self.h / 4, self.cr, 8)
         end,
         walk = function(self)
             if self.state == 'play' then
@@ -108,11 +117,17 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
         end,
         look = function(self)
             -- todo, do look circle animation
+            self.state = 'looking'
+            looks -= 1
+            if (looks < 1) looks = 0 
+            printh("look")
+            printh("x= " .. self.x .. ", y= " .. self.y, 'debug.log', false)
         end,
         found = function(self, x, y)
             -- todo
             -- has this hiden player been found
         end,
+        -- all states public functions
         start = function(self, state)
             if state == 'play' then
                 self.x = 18
@@ -120,8 +135,10 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
             elseif state == 'hide' then
                 ---- then assign the player to a random
                 ----  hiding place (from provided hiding places)
-                self.x = 120
-                self.y = 120
+                printh("hiding player count: " .. #self.hidingPlaces, 'debug.log', false)
+                local place = rnd(self.hidingPlaces)
+                self.x = place.x
+                self.y = place.y
             end
             self.state = state
         end,
@@ -136,16 +153,15 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
             }
         end,
         canMove = function(self, oldx, oldy)
-
             -- only calculate if the delta has changed
             if oldx ~= self.x or oldy ~= self.y then
                 --todo, col detection based off flags
                 -- the tiles you can walk on are marked with the 0 flag
                 local b = self:getHitBox()
-                local tl =  fget(mget(b.x0 / 8, b.y0 / 8), 1)
-                local tr =  fget(mget(b.x1 / 8, b.y0 / 8), 1)
-                local bl =  fget(mget(b.x0 / 8, b.y1 / 8), 1)
-                local br =  fget(mget(b.x1 / 8, b.y1 / 8), 1)
+                local tl = fget(mget(b.x0 / 8, b.y0 / 8), 1)
+                local tr = fget(mget(b.x1 / 8, b.y0 / 8), 1)
+                local bl = fget(mget(b.x0 / 8, b.y1 / 8), 1)
+                local br = fget(mget(b.x1 / 8, b.y1 / 8), 1)
                 -- if self.state == 'play' then
                 --     printh("top left x: " .. b.x0, 'debug.log', false)
                 --     printh("top left y: " .. b.y0, 'debug.log', false)
@@ -159,7 +175,7 @@ function init_player(name, px, py, w, h, x, y, state, hidingPlaces, s)
                 return tl and tr and bl and br
             end
             return true
-        end,
+        end
         -- active player public functions
     }
 end
