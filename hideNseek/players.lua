@@ -34,11 +34,14 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         t = px,
         -- look circle raduis
         cr = 4,
+        -- hiding place index
+        hidingPlace = {},
         update = function(self)
             self.vx = 0
             self.vy = 0
             local oldx = self.x
             local oldy = self.y
+            local overrideBounds = false
             -- printh("player update: " .. self.state, 'debug.log', false)
 
             -- bounds
@@ -75,7 +78,7 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                 if self.cr > 14 then
                     for p in all(players) do
                         if p.state == "hide" then
-                            p:found(self:getBorderBox())
+                            p:found(self:getBox())
                         end
                     end
                     self.state = 'play'
@@ -84,6 +87,24 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                 -- Hiding States
             elseif self.state == "reveal" then
                 -- todo, step though the reveal animation
+                -- --     { x = 58, y = 97, toX = 58, toY = 62 },
+                overrideBounds = true
+                if self.hidingPlace.x < self.hidingPlace.toX then
+                    self.vx = self.s
+                end
+                if self.hidingPlace.x > self.hidingPlace.toX then
+                    self.vx = -self.s
+                end
+                if self.hidingPlace.y < self.hidingPlace.toY then
+                    self.vy = self.s
+                end
+                if self.hidingPlace.y > self.hidingPlace.toY then
+                    self.vy = -self.s
+                end
+                if self.hidingPlace.toX == self.x and self.hidingPlace.toY == self.y then
+                    looks += 3
+                    self.state = 'found'
+                end
             elseif self.state == "found" then
                 -- just stand there, maybe follow the active player
                 -- once I watch that AI course
@@ -94,18 +115,26 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             end
             self.x += self.vx
             self.y += self.vy
-            if not self:canMove(oldx, oldy) then
-                self.x = oldx
-                self.y = oldy
+            if not overrideBounds then
+                if not self:canMove(oldx, oldy) then
+                    self.x = oldx
+                    self.y = oldy
+                end
             end
         end,
         -- all states public functions
         draw = function(self)
             sspr(self.pxf, self.py, self.w, self.h, self.x, self.y, self.w, self.h, self.vx < 0)
             if (self.state == "title_selected") rect(self.x - 2, self.y - 2, self.x + self.w + 2, self.y + self.h + 2, 3)
+            if (self.state == 'looking') circ(self.x + self.w / 2, self.y + self.h / 4, self.cr, 8)
+            --
+            -- show hitbox for moving
             -- local hitbox = self:getHitBox()
             -- rect(hitbox.x0, hitbox.y0, hitbox.x1, hitbox.y1, 6)
-            if (self.state == 'looking') circ(self.x + self.w / 2, self.y + self.h / 4, self.cr, 8)
+            -- 
+            -- show border box
+            -- local borderBox = self:getBox()
+            -- rect(borderBox.x, borderBox.y, borderBox.xw, borderBox.yh, 8)
         end,
         start = function(self, state)
             if state == 'play' then
@@ -115,9 +144,9 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                 ---- then assign the player to a random
                 ----  hiding place (from provided hiding places)
                 printh("hiding player count: " .. #self.hidingPlaces, 'debug.log', false)
-                local place = rnd(self.hidingPlaces)
-                self.x = place.x
-                self.y = place.y
+                self.hidingPlace = rnd(self.hidingPlaces)
+                self.x = self.hidingPlace.x
+                self.y = self.hidingPlace.y
             end
             self.state = state
         end,
@@ -125,19 +154,28 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         getCenter = function(self)
             return { x = self.x + self.w / 2, y = self.y + self.h / 2 }
         end,
-        getBorderBox = function(self)
-            -- x, y for each corner and mid points
+        getBox = function(self)
+            local border = 3
             return {
-                { x = self.x, y = self.y }, --top left
-                { x = self.x + flr(self.w / 2), y = self.y }, --top middle
-                { x = self.x + self.w, y = self.y }, -- top right
-                { x = self.x + self.w, y = flr(self.y / 2) }, -- middle right
-                { x = self.x + self.w, y = self.y + self.h }, -- bottom right
-                { x = self.x + flr(self.w/2), y = self.y + flr(self.h/2) }, -- middle bottom
-                { x = self.x, y = self.y + self.h }, -- bottom left
-                { x = self.x, y = self.y + flr(self.h/2) } -- middle left
+                x = self.x - border,
+                xw = self.x + self.w + border,
+                y = self.y - border,
+                yh = self.y + self.h + border
             }
         end,
+        -- getBorderBox = function(self)
+        --     -- x, y for each corner and mid points
+        --     return {
+        --         { x = self.x, y = self.y }, --top left
+        --         { x = self.x + flr(self.w / 2), y = self.y }, --top middle
+        --         { x = self.x + self.w, y = self.y }, -- top right
+        --         { x = self.x + self.w, y = flr(self.y / 2) }, -- middle right
+        --         { x = self.x + self.w, y = self.y + self.h }, -- bottom right
+        --         { x = self.x + flr(self.w / 2), y = self.y + flr(self.h / 2) }, -- middle bottom
+        --         { x = self.x, y = self.y + self.h }, -- bottom left
+        --         { x = self.x, y = self.y + flr(self.h / 2) } -- middle left
+        --     }
+        -- end,
         -- active player public functions
         -- active player private functions
         walk = function(self)
@@ -198,32 +236,19 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         -- hidden player public functions
         -- hidden player private functions
         found = function(self, cmpBorderBox)
-            -- loop through each corner of self, and the comparer
-            -- find the closest distance between any of the points
-            local dis = 999
-            for selfbb in all(self:getBorderBox()) do
-                local x1 = selfbb.x
-                local y1 = selfbb.y
-                for cmpxy in all(cmpBorderBox) do
-                    local x2 = cmpxy.x
-                    local y2 = cmpxy.y
-                    -- calculate distance
-                    local dx = x2 - x1
-                    local dy = y2 - y1
+            --1
+            local selfBorderBox = self:getBox()
+            -- 2
 
-                    local maybeDis = ceil(sqrt(dx * dx + dy * dy))
-                    if maybeDis < dis then
-                        dis = maybeDis
-                    end
-                end
-            end
+            local isTouching = cmpBorderBox.x < selfBorderBox.xw
+                    and cmpBorderBox.xw > selfBorderBox.x
+                    and cmpBorderBox.y < selfBorderBox.yh
+                    and cmpBorderBox.yh > selfBorderBox.y
 
-            printh("distance to : " .. self.name .. " " .. dis, 'debug.log', false)
-            if dis < 3 then
-                printh("found : " .. self.name, 'debug.log', false)
-                -- self.state = 'reveal'
+            printh("is touching : " .. self.name .. " " .. tostr(isTouching), 'debug.log', false)
+            if isTouching then
+                self.state = 'reveal'
             end
-            -- has this hiden player been found
         end
     }
 end
