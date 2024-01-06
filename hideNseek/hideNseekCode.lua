@@ -1,17 +1,17 @@
 --todo:
 
 -- get chars walking again
--- colision detechtion
----- each player will need a smaller hitbox for collision detetion
--- hiding places overally
-
 -- hook up mummy
+
+-- look action
+-- look action // when the look button is pressed, checks pixels around the player for a hidden sqare
+-- tmp static places 
+
 -- hidden people (x, y on map)
 -- list of hiding places for each player
 ---- randomly assigned when game begins
 ---- will need a list of x,y hiding places
 ---- assign the hiding
--- look action // when the look button is pressed, checks pixels around the player for a hidden sqare
 
 -- score system
 -- game over win /loose screen
