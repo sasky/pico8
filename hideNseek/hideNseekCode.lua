@@ -20,7 +20,7 @@ function _init()
     add(
         players, init_player(
             'arla', 8, 0, 12, 16, 10, 90 - 16, {
-                { x = x, y = 17, toX = 18, toY = 17 },
+                { x = 3, y = 17, toX = 18, toY = 17 },
                 { x = 18, y = 0, toX = 18, toY = 17 },
                 { x = 3, y = 62, toX = 18, toY = 62 },
                 { x = 18, y = 98, toX = 18, toY = 77 },
@@ -38,7 +38,7 @@ function _init()
     add(
         players, init_player(
             'phoebe', 1, 16, 13, 14, 40, 90 - 14, {
-                { x = x, y = 17, toX = 18, toY = 17 },
+                { x = 3, y = 17, toX = 18, toY = 17 },
                 { x = 18, y = -2, toX = 18, toY = 17 },
                 { x = 3, y = 62, toX = 18, toY = 62 },
                 { x = 18, y = 98, toX = 18, toY = 77 },
@@ -144,15 +144,22 @@ function _draw()
         --title screen
         --player selection
         cls()
-        -- dra
-        map()
+        -- draw the floor
+        for y = 0, 120, 8 do
+            for x = 0, 120, 8 do
+                -- Access and modify pixels within the 8x8 block at (x, y) here
+                map(16, 0, x, y)
+            end
+        end
         drawPlayers({ 'hide', 'reveal' })
+        -- draw the furniture
+        map()
         -- hiding places
         -- couch
         -- map(9, 4, 9 * 8, 4 * 8, 3, 6)
 
         drawPlayers({ 'found' })
-        drawPlayers({ 'play' })
+        drawPlayers({ 'play','looking' })
         -- scores
         rectfill(0, 112, 127, 127, 9)
         print('looks left: ' .. looks, 5, 120, 7)
