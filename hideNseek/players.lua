@@ -197,7 +197,6 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             self.state = 'looking'
             looks -= 1
             if (looks < 1) looks = 0
-            printh("look")
             printh("x= " .. self.x .. ", y= " .. self.y, 'debug.log', false)
         end,
         getHitBox = function(self)
@@ -212,22 +211,12 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         canMove = function(self, oldx, oldy)
             -- only calculate if the delta has changed
             if oldx ~= self.x or oldy ~= self.y then
-                --todo, col detection based off flags
-                -- the tiles you can walk on are marked with the 0 flag
+                -- the tiles you can walk on are marked with the 1 flag
                 local b = self:getHitBox()
                 local tl = fget(mget(b.x0 / 8, b.y0 / 8), 1)
                 local tr = fget(mget(b.x1 / 8, b.y0 / 8), 1)
                 local bl = fget(mget(b.x0 / 8, b.y1 / 8), 1)
                 local br = fget(mget(b.x1 / 8, b.y1 / 8), 1)
-                -- if self.state == 'play' then
-                --     printh("top left x: " .. b.x0, 'debug.log', false)
-                --     printh("top left y: " .. b.y0, 'debug.log', false)
-                --     printh("top left map: " .. mget(b.x0 / 8, b.y0 / 8), 'debug.log', false)
-                --     printh("top left: " .. tostr(tl), 'debug.log', false)
-                --     printh("top right: " .. tostr(tr), 'debug.log', false)
-                --     printh("bottom left: " .. tostr(tl), 'debug.log', false)
-                --     printh("bottom right: " .. tostr(tl), 'debug.log', false)
-                -- end
 
                 return tl and tr and bl and br
             end
@@ -236,16 +225,14 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         -- hidden player public functions
         -- hidden player private functions
         found = function(self, cmpBorderBox)
-            --1
             local selfBorderBox = self:getBox()
-            -- 2
 
             local isTouching = cmpBorderBox.x < selfBorderBox.xw
                     and cmpBorderBox.xw > selfBorderBox.x
                     and cmpBorderBox.y < selfBorderBox.yh
                     and cmpBorderBox.yh > selfBorderBox.y
 
-            printh("is touching : " .. self.name .. " " .. tostr(isTouching), 'debug.log', false)
+            -- printh("is touching : " .. self.name .. " " .. tostr(isTouching), 'debug.log', false)
             if isTouching then
                 self.state = 'reveal'
             end

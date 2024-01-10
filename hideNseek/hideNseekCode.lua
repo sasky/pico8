@@ -3,15 +3,8 @@
 -- get chars walking again
 -- hook up mummy
 
--- look action
--- look action // when the look button is pressed, checks pixels around the player for a hidden sqare
--- tmp static places 
-
 -- hidden people (x, y on map)
--- list of hiding places for each player
----- randomly assigned when game begins
 ---- will need a list of x,y hiding places
----- assign the hiding
 
 -- score system
 -- game over win /loose screen
@@ -24,54 +17,66 @@ function _init()
     selected_plr = 'select player'
     selected = 0
     debug = true
-    if state == 'title' then
-        --title screen
-        --player selection
-        add(players, init_player('arla', 8, 0, 12, 16, 10, 90 - 16, {
-            -- daddy hiding places
-            { x = 47, y = 24, toX = 63, toY = 24 },
-            { x = 47, y = 41, toX = 47, toY = 24 },
-            { x = 58, y = 97, toX = 58, toY = 62 },
-            { x = 111, y = 78, toX = 95, toY = 78 },
-            { x = 86, y = 39, toX = 104, toY = 39 },
-            { x = 1, y = 32, toX = 16, toY = 32 },
-        }))
-        add(players, init_player('phoebe', 1, 16, 13, 14, 40, 90 - 14, {
-            -- daddy hiding places
-            { x = 47, y = 24, toX = 63, toY = 24 },
-            { x = 47, y = 41, toX = 47, toY = 24 },
-            { x = 58, y = 97, toX = 58, toY = 62 },
-            { x = 111, y = 78, toX = 95, toY = 78 },
-            { x = 86, y = 39, toX = 104, toY = 39 },
-            { x = 1, y = 32, toX = 16, toY = 32 },
-        }))
+    add(
+        players, init_player(
+            'arla', 8, 0, 12, 16, 10, 90 - 16, {
+                { x = x, y = 17, toX = 18, toY = 17 },
+                { x = 18, y = 0, toX = 18, toY = 17 },
+                { x = 3, y = 62, toX = 18, toY = 62 },
+                { x = 18, y = 98, toX = 18, toY = 77 },
+                { x = 41, y = 98, toX = 41, toY = 77 },
+                { x = 45, y = 55, toX = 45, toY = 74 },
+                { x = 51, y = 38, toX = 66, toY = 38 },
+                { x = 44, y = 25, toX = 44, toY = 7 },
+                { x = 85, y = 1, toX = 85, toY = 15 },
+                { x = 113, y = 49, toX = 113, toY = 30 },
+                { x = 87, y = 55, toX = 67, toY = 55 },
+                { x = 114, y = 84, toX = 97, toY = 84 }
+            }
+        )
+    )
+    add(
+        players, init_player(
+            'phoebe', 1, 16, 13, 14, 40, 90 - 14, {
+                { x = x, y = 17, toX = 18, toY = 17 },
+                { x = 18, y = -2, toX = 18, toY = 17 },
+                { x = 3, y = 62, toX = 18, toY = 62 },
+                { x = 18, y = 98, toX = 18, toY = 77 },
+                { x = 41, y = 98, toX = 41, toY = 77 },
+                { x = 45, y = 55, toX = 45, toY = 74 },
+                { x = 51, y = 38, toX = 66, toY = 38 },
+                { x = 44, y = 25, toX = 44, toY = 7 },
+                { x = 85, y = 1, toX = 85, toY = 15 },
+                { x = 113, y = 49, toX = 113, toY = 30 },
+                { x = 87, y = 55, toX = 67, toY = 55 },
+                { x = 114, y = 84, toX = 97, toY = 84 }
+            }
+        )
+    )
 
-        add(players, init_player('daddy', 56, 0, 17, 32, 70, 90 - 32, {
-            -- daddy hiding places
-            { x = 47, y = 24, toX = 63, toY = 24 },
-            { x = 47, y = 41, toX = 47, toY = 24 },
-            { x = 58, y = 97, toX = 58, toY = 62 },
-            { x = 111, y = 78, toX = 95, toY = 78 },
-            { x = 86, y = 39, toX = 104, toY = 39 },
-            { x = 1, y = 32, toX = 16, toY = 32 },
-        }))
+    add(
+        players, init_player(
+            'daddy', 56, 0, 17, 32, 70, 90 - 32, {
+                -- daddy hiding places
+                { x = 47, y = 24, toX = 63, toY = 24 },
+                { x = 47, y = 41, toX = 47, toY = 24 },
+                { x = 58, y = 97, toX = 58, toY = 62 },
+                { x = 111, y = 78, toX = 95, toY = 78 },
+                { x = 86, y = 39, toX = 104, toY = 39 },
+                { x = 0, y = 32, toX = 16, toY = 32 }
+            }
+        )
+    )
 
-        -- add(players, init_player('mummy', 56, 0, 17, 32, 70, 90 - 32,{
-        --     -- daddy hiding places
-        --     { x = 47, y = 24, toX = 63, toY = 24 },
-        --     { x = 47, y = 41, toX = 47, toY = 24 },
-        --     { x = 58, y = 97, toX = 58, toY = 62 },
-        --     { x = 111, y = 78, toX = 95, toY = 78 },
-        --     { x = 86, y = 39, toX = 104, toY = 39 },
-        --     { x = 1, y = 32, toX = 16, toY = 32 },
-        -- }))
-
-    elseif state == 'play' then
-        -- add the players
-    elseif state == 'end' then
-        -- if won or lost
-        -- play again ?
-    end
+    -- add(players, init_player('mummy', 56, 0, 17, 32, 70, 90 - 32,{
+    --     -- daddy hiding places
+    --     { x = 47, y = 24, toX = 63, toY = 24 },
+    --     { x = 47, y = 41, toX = 47, toY = 24 },
+    --     { x = 58, y = 97, toX = 58, toY = 62 },
+    --     { x = 111, y = 78, toX = 95, toY = 78 },
+    --     { x = 86, y = 39, toX = 104, toY = 39 },
+    --     { x = 1, y = 32, toX = 16, toY = 32 },
+    -- }))
 end
 
 function _update()
@@ -130,7 +135,7 @@ function _draw()
         print("hide", 128 / 2 - 8, 20, 12)
         print("n", 128 / 2 - 3, 30, 12)
         print("seek", 128 / 2 - 8, 40, 12)
-        drawPlayers()
+        drawPlayers({ 'title', 'title_selected' })
         selectedx = 128 / 2 - #selected_plr / 2 * 4
         print(selected_plr, selectedx, 100, 3)
         --title screen
@@ -139,24 +144,30 @@ function _draw()
         --title screen
         --player selection
         cls()
+        -- dra
         map()
-        drawPlayers()
+        drawPlayers({ 'hide', 'reveal' })
         -- hiding places
         -- couch
         -- map(9, 4, 9 * 8, 4 * 8, 3, 6)
 
+        drawPlayers({ 'found' })
+        drawPlayers({ 'play' })
         -- scores
-        rectfill(0 ,112, 127, 127,9)
-        print('looks left: ' ..looks, 5, 120, 7)
-
+        rectfill(0, 112, 127, 127, 9)
+        print('looks left: ' .. looks, 5, 120, 7)
     elseif state == 'end' then
         -- if won or lost
         -- play again ?
     end
 end
 
-function drawPlayers()
+function drawPlayers(states)
     for p in all(players) do
-        p:draw()
+        for state in all(states) do
+            if p.state == state then
+                p:draw()
+            end
+        end
     end
 end
