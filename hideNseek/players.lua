@@ -104,6 +104,18 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                 if self.hidingPlace.toX == self.x and self.hidingPlace.toY == self.y then
                     looks += 3
                     self.state = 'found'
+                    -- check if the player has won the game
+                    local playersFound = 0
+                    for p in all(players) do
+                        if p.state == "found" then
+                            playersFound+= 1
+                        end
+                    end
+                    -- -1 is the active player, so checking if all hidden players have been found
+                    if playersFound >= #players -1 then
+                        _init('won')
+                    end
+
                 end
             elseif self.state == "found" then
                 -- just stand there, maybe follow the active player
@@ -131,7 +143,7 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             -- show hitbox for moving
             -- local hitbox = self:getHitBox()
             -- rect(hitbox.x0, hitbox.y0, hitbox.x1, hitbox.y1, 6)
-            -- 
+            --
             -- show border box
             -- local borderBox = self:getBox()
             -- rect(borderBox.x, borderBox.y, borderBox.xw, borderBox.yh, 8)
@@ -143,7 +155,7 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             elseif state == 'hide' then
                 ---- then assign the player to a random
                 ----  hiding place (from provided hiding places)
-                printh("hiding player count: " .. #self.hidingPlaces, 'debug.log', false)
+                -- printh("hiding player count: " .. #self.hidingPlaces, 'debug.log', false)
                 self.hidingPlace = rnd(self.hidingPlaces)
                 self.x = self.hidingPlace.x
                 self.y = self.hidingPlace.y
@@ -196,8 +208,11 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             -- todo, do look circle animation
             self.state = 'looking'
             looks -= 1
-            if (looks < 1) looks = 0
-            printh("x= " .. self.x .. ", y= " .. self.y, 'debug.log', false)
+            if looks < 1 then
+                looks = 0
+                _init('lost')
+            end
+            -- printh("x= " .. self.x .. ", y= " .. self.y, 'debug.log', false)
         end,
         getHitBox = function(self)
             -- draw a rect at bottom centre of the player sprite

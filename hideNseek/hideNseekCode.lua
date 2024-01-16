@@ -3,16 +3,16 @@
 -- get chars walking again
 -- hook up mummy
 
--- hidden people (x, y on map)
----- will need a list of x,y hiding places
-
--- score system
 -- game over win /loose screen
+-- players can't be hiden in the same place
+-- sound effects
 
-function _init()
-    state = 'title'
-    score = 0
-    looks = 5
+function _init(s)
+    if s == nil then
+        s = 'title'
+    end
+    state = s
+    looks = 10
     players = {}
     selected_plr = 'select player'
     selected = 0
@@ -80,7 +80,7 @@ function _init()
 end
 
 function _update()
-    if state == 'title' then
+    if state == 'lost' or state == 'won' or state == 'title' then
         --player selection
         if selected != 0 then
             if btnp(0) then
@@ -120,9 +120,6 @@ function _update()
         for p in all(players) do
             p:update()
         end
-    elseif state == 'end' then
-        -- if won or lost
-        -- play again ?
     end
     if debug then
         -- printh("state: " .. state , 'debug.log',false)
@@ -130,16 +127,28 @@ function _update()
 end
 
 function _draw()
-    if state == 'title' then
+    if state == 'lost' then
         cls(9)
+        print("sorry", 128 / 2 - 10, 20, 12)
+        print("you lost", 128 / 2 - 16, 30, 12)
+        print("try again?", 128 / 2 - 20, 40, 12)
+    elseif state == 'won' then
+        cls(9)
+        print("congratulations!", 128 / 2 - 32, 20, 12)
+        print("you won!", 128 / 2 - 16, 30, 12)
+        print("play again?", 128 / 2 - 22, 40, 12)
+    elseif state == 'title' then
+        cls(9)
+        --title screen
         print("hide", 128 / 2 - 8, 20, 12)
         print("n", 128 / 2 - 3, 30, 12)
         print("seek", 128 / 2 - 8, 40, 12)
+    end
+    if state == 'lost' or state == 'won' or state == 'title' then
+        --player selection
         drawPlayers({ 'title', 'title_selected' })
         selectedx = 128 / 2 - #selected_plr / 2 * 4
         print(selected_plr, selectedx, 100, 3)
-        --title screen
-        --player selection
     elseif state == 'play' then
         --title screen
         --player selection
@@ -159,14 +168,14 @@ function _draw()
         -- map(9, 4, 9 * 8, 4 * 8, 3, 6)
 
         drawPlayers({ 'found' })
-        drawPlayers({ 'play','looking' })
+        drawPlayers({ 'play', 'looking' })
         -- scores
         rectfill(0, 112, 127, 127, 9)
         print('looks left: ' .. looks, 5, 120, 7)
-    elseif state == 'end' then
-        -- if won or lost
-        -- play again ?
     end
+    -- if state != nil then
+    --     printh("state= " .. state, 'debug.log', false)
+    -- end
 end
 
 function drawPlayers(states)
