@@ -1,9 +1,13 @@
 --todo:
 
+-- end screens text in white and at bottom
+-- continue circle animation on win or loose state
+-- on loose, hiden players reveal themselves
+-- daddy under table reveal is bad, needs to come out over carpet
+
 -- get chars walking again
 -- hook up mummy
 
--- game over win /loose screen
 -- players can't be hiden in the same place
 -- sound effects
 
@@ -80,7 +84,7 @@ function _init(s)
 end
 
 function _update()
-    if state == 'lost' or state == 'won' or state == 'title' then
+    if state ==  'title' then
         --player selection
         if selected != 0 then
             if btnp(0) then
@@ -120,6 +124,10 @@ function _update()
         for p in all(players) do
             p:update()
         end
+    elseif state == 'lost' or state == 'won' then
+        if btnp(4) or btnp(5) then
+            _init('title')
+        end
     end
     if debug then
         -- printh("state: " .. state , 'debug.log',false)
@@ -127,29 +135,16 @@ function _update()
 end
 
 function _draw()
-    if state == 'lost' then
+    if  state == 'title' then
         cls(9)
-        print("sorry", 128 / 2 - 10, 20, 12)
-        print("you lost", 128 / 2 - 16, 30, 12)
-        print("try again?", 128 / 2 - 20, 40, 12)
-    elseif state == 'won' then
-        cls(9)
-        print("congratulations!", 128 / 2 - 32, 20, 12)
-        print("you won!", 128 / 2 - 16, 30, 12)
-        print("play again?", 128 / 2 - 22, 40, 12)
-    elseif state == 'title' then
-        cls(9)
-        --title screen
         print("hide", 128 / 2 - 8, 20, 12)
         print("n", 128 / 2 - 3, 30, 12)
         print("seek", 128 / 2 - 8, 40, 12)
-    end
-    if state == 'lost' or state == 'won' or state == 'title' then
         --player selection
         drawPlayers({ 'title', 'title_selected' })
         selectedx = 128 / 2 - #selected_plr / 2 * 4
         print(selected_plr, selectedx, 100, 3)
-    elseif state == 'play' then
+    elseif state == 'play' or state == 'won' or state == 'lost' then
         --title screen
         --player selection
         cls()
@@ -172,6 +167,15 @@ function _draw()
         -- scores
         rectfill(0, 112, 127, 127, 9)
         print('looks left: ' .. looks, 5, 120, 7)
+    end
+    if state == 'lost' then
+        print("sorry", 128 / 2 - 10, 20, 0)
+        print("you lost", 128 / 2 - 16, 30, 0)
+        print("try again?", 128 / 2 - 20, 40, 0)
+    elseif state == 'won' then
+        print("congratulations!", 128 / 2 - 32, 20,0)
+        print("you won!", 128 / 2 - 16, 30, 0)
+        print("play again?", 128 / 2 - 22, 40, 0)
     end
     -- if state != nil then
     --     printh("state= " .. state, 'debug.log', false)

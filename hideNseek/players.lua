@@ -7,6 +7,7 @@
 --     { x = 86, y = 39, toX = 104, toY = 39 },
 --     { x = 1, y = 32, toX = 16, toY = 32 },
 -- }
+--             'arla', 8, 0, 12, 16, 10, 90 - 16, {
 function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
     s = s or 1
 
@@ -31,7 +32,7 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         -- keeping track of the x pos to move the frame over
         pxf = px,
         -- timer
-        t = px,
+        t = 0,
         -- look circle raduis
         cr = 4,
         -- hiding place index
@@ -50,24 +51,25 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             -- Active states
             if self.state == 'play' then
                 if btn(0) then
+                -- if btnp(0) then
                     -- left
                     self.vx = -self.s
-                    -- self:walk()
+                    self:walk()
                 elseif btn(1) then
-                    -- and canMove(p.x + 12 + 2, p.y) then
+                -- elseif btnp(1) then
                     -- right
                     self.vx = self.s
-                    -- self:walk()
+                    self:walk()
                 elseif btn(2) then
-                    -- and canMove(p.x, p.y - 2) then
+                -- elseif btnp(2) then
                     -- up
                     self.vy = -self.s
-                    -- self:walk()
+                    self:walk()
                 elseif btn(3) then
-                    -- and canMove(p.x, p.y + 16 + 2) then
+                -- elseif btnp(3) then
                     -- down
                     self.vy = self.s
-                    -- self:walk()
+                    self:walk()
                 end
 
                 if btnp(5) then
@@ -108,14 +110,13 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                     local playersFound = 0
                     for p in all(players) do
                         if p.state == "found" then
-                            playersFound+= 1
+                            playersFound += 1
                         end
                     end
                     -- -1 is the active player, so checking if all hidden players have been found
-                    if playersFound >= #players -1 then
-                        _init('won')
+                    if playersFound >= #players - 1 then
+                        state = 'won'
                     end
-
                 end
             elseif self.state == "found" then
                 -- just stand there, maybe follow the active player
@@ -127,6 +128,9 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             end
             self.x += self.vx
             self.y += self.vy
+            -- debug
+            -- overrideBounds = true
+            -- end debug
             if not overrideBounds then
                 if not self:canMove(oldx, oldy) then
                     self.x = oldx
@@ -192,16 +196,21 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
         -- active player private functions
         walk = function(self)
             if self.state == 'play' then
-                self.t += self.w / 2
-                local max = self.px + self.w * 3
 
-                if self.t % (self.w + self.px) == 0 then
+                local lw = 4
+                -- increase the timer
+                self.t += 1
+                -- every forth inc, move the pixel x frame
+                if self.t % 4 == 0 then
                     self.pxf += self.w
                 end
+                local max = self.px + self.w * 3
+                -- if the pxf has gone past the last frame
+                -- bring it back to the start
                 if self.pxf >= max then
                     self.pxf = self.px
-                    -- self.t =  self.px
                 end
+                
             end
         end,
         look = function(self)
@@ -210,7 +219,7 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
             looks -= 1
             if looks < 1 then
                 looks = 0
-                _init('lost')
+                state = 'lost'
             end
             -- printh("x= " .. self.x .. ", y= " .. self.y, 'debug.log', false)
         end,
