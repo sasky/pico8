@@ -5,12 +5,15 @@
 -- on loose, hiden players reveal themselves
 -- daddy under table reveal is bad, needs to come out over carpet
 
--- DOING: -- get daddy pixels touched up
--- make mummy
+-- DOING: make mummy
 -- hook up mummy
 
 -- players can't be hiden in the same place
 -- sound effects
+-- export
+-- put up on website
+-- add heaps of code comments
+-- tidy up code
 
 function _init(s)
     if s == nil then
