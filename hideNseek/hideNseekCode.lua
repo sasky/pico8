@@ -5,7 +5,8 @@
 -- on loose, hiden players reveal themselves
 -- daddy under table reveal is bad, needs to come out over carpet
 
--- get chars walking again
+-- DOING: -- get daddy pixels touched up
+-- make mummy
 -- hook up mummy
 
 -- players can't be hiden in the same place
@@ -60,7 +61,7 @@ function _init(s)
 
     add(
         players, init_player(
-            'daddy', 56, 0, 17, 32, 70, 90 - 32, {
+            'daddy', 58, 0, 17, 32, 70, 90 - 32, {
                 -- daddy hiding places
                 { x = 47, y = 24, toX = 63, toY = 24 },
                 { x = 47, y = 41, toX = 47, toY = 24 },
@@ -84,7 +85,7 @@ function _init(s)
 end
 
 function _update()
-    if state ==  'title' then
+    if state == 'title' then
         --player selection
         if selected != 0 then
             if btnp(0) then
@@ -135,7 +136,7 @@ function _update()
 end
 
 function _draw()
-    if  state == 'title' then
+    if state == 'title' then
         cls(9)
         print("hide", 128 / 2 - 8, 20, 12)
         print("n", 128 / 2 - 3, 30, 12)
@@ -173,7 +174,7 @@ function _draw()
         print("you lost", 128 / 2 - 16, 30, 0)
         print("try again?", 128 / 2 - 20, 40, 0)
     elseif state == 'won' then
-        print("congratulations!", 128 / 2 - 32, 20,0)
+        print("congratulations!", 128 / 2 - 32, 20, 0)
         print("you won!", 128 / 2 - 16, 30, 0)
         print("play again?", 128 / 2 - 22, 40, 0)
     end
