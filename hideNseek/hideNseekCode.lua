@@ -1,10 +1,7 @@
 --todo:
 
--- end screens text in white and at bottom
--- continue circle animation on win or loose state
--- on loose, hiden players reveal themselves
 -- daddy under table reveal is bad, needs to come out over carpet
-
+-- go over bad hiding/ reveal places
 
 -- players can't be hiden in the same place
 -- sound effects
@@ -23,6 +20,33 @@ function _init(s)
     selected_plr = 'select player'
     selected = 0
     debug = true
+    add(
+        players, init_player(
+            'daddy', 58, 0, 17, 32, 63, 90 - 31, {
+                -- daddy hiding places
+                { x = 47, y = 24, toX = 63, toY = 24 },
+                { x = 47, y = 41, toX = 47, toY = 24 },
+                { x = 58, y = 97, toX = 58, toY = 62 },
+                { x = 111, y = 78, toX = 95, toY = 78 },
+                { x = 86, y = 39, toX = 104, toY = 39 },
+                { x = 0, y = 32, toX = 16, toY = 32 }
+            }
+        )
+    )
+
+    add(
+        players, init_player(
+            'mummy', 0, 35, 21, 29, 90, 61, {
+                -- daddy hiding places
+                { x = 47, y = 24, toX = 63, toY = 24 },
+                { x = 47, y = 41, toX = 47, toY = 24 },
+                { x = 58, y = 97, toX = 58, toY = 62 },
+                { x = 111, y = 78, toX = 95, toY = 78 },
+                { x = 86, y = 39, toX = 104, toY = 39 },
+                { x = 1, y = 32, toX = 16, toY = 32 }
+            }
+        )
+    )
     add(
         players, init_player(
             'arla', 8, 0, 12, 16, 10, 90 - 16, {
@@ -60,33 +84,6 @@ function _init(s)
         )
     )
 
-    add(
-        players, init_player(
-            'daddy', 58, 0, 17, 32, 63, 90 - 31, {
-                -- daddy hiding places
-                { x = 47, y = 24, toX = 63, toY = 24 },
-                { x = 47, y = 41, toX = 47, toY = 24 },
-                { x = 58, y = 97, toX = 58, toY = 62 },
-                { x = 111, y = 78, toX = 95, toY = 78 },
-                { x = 86, y = 39, toX = 104, toY = 39 },
-                { x = 0, y = 32, toX = 16, toY = 32 }
-            }
-        )
-    )
-
-    add(
-        players, init_player(
-            'mummy', 0, 35, 21, 29, 90, 61, {
-                -- daddy hiding places
-                { x = 47, y = 24, toX = 63, toY = 24 },
-                { x = 47, y = 41, toX = 47, toY = 24 },
-                { x = 58, y = 97, toX = 58, toY = 62 },
-                { x = 111, y = 78, toX = 95, toY = 78 },
-                { x = 86, y = 39, toX = 104, toY = 39 },
-                { x = 1, y = 32, toX = 16, toY = 32 }
-            }
-        )
-    )
 end
 
 function _update()
@@ -131,6 +128,15 @@ function _update()
             p:update()
         end
     elseif state == 'lost' or state == 'won' then
+        for p in all(players) do
+            -- put all states in found, expect for people in hidin
+            if p.state == 'hide' or p.state == 'reveal' then
+                p.state = 'reveal'
+            else
+                p.state = 'lostwon'
+            end
+            p:update()
+        end
         if btnp(4) or btnp(5) then
             _init('title')
         end
@@ -164,24 +170,18 @@ function _draw()
         drawPlayers({ 'hide', 'reveal' })
         -- draw the furniture
         map()
-        -- hiding places
-        -- couch
-        -- map(9, 4, 9 * 8, 4 * 8, 3, 6)
 
-        drawPlayers({ 'found' })
+        drawPlayers({ 'found' ,'lostwon'})
         drawPlayers({ 'play', 'looking' })
         -- scores
         rectfill(0, 112, 127, 127, 9)
-        print('looks left: ' .. looks, 5, 120, 7)
     end
-    if state == 'lost' then
-        print("sorry", 128 / 2 - 10, 20, 0)
-        print("you lost", 128 / 2 - 16, 30, 0)
-        print("try again?", 128 / 2 - 20, 40, 0)
+    if state == 'play' then
+        print('looks left: ' .. looks, 5, 120, 7)
+    elseif state == 'lost' then
+        print("sorry, you loose, try again?", 5, 120, 7)
     elseif state == 'won' then
-        print("congratulations!", 128 / 2 - 32, 20, 0)
-        print("you won!", 128 / 2 - 16, 30, 0)
-        print("play again?", 128 / 2 - 22, 40, 0)
+        print("very good, you won!, play again?", 1, 120, 7)
     end
     -- if state != nil then
     --     printh("state= " .. state, 'debug.log', false)

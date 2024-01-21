@@ -181,19 +181,6 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                 yh = self.y + self.h + border
             }
         end,
-        -- getBorderBox = function(self)
-        --     -- x, y for each corner and mid points
-        --     return {
-        --         { x = self.x, y = self.y }, --top left
-        --         { x = self.x + flr(self.w / 2), y = self.y }, --top middle
-        --         { x = self.x + self.w, y = self.y }, -- top right
-        --         { x = self.x + self.w, y = flr(self.y / 2) }, -- middle right
-        --         { x = self.x + self.w, y = self.y + self.h }, -- bottom right
-        --         { x = self.x + flr(self.w / 2), y = self.y + flr(self.h / 2) }, -- middle bottom
-        --         { x = self.x, y = self.y + self.h }, -- bottom left
-        --         { x = self.x, y = self.y + flr(self.h / 2) } -- middle left
-        --     }
-        -- end,
         -- active player public functions
         -- active player private functions
         walk = function(self)
