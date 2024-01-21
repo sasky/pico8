@@ -181,7 +181,7 @@ function _draw()
     elseif state == 'lost' then
         print("sorry, you loose, try again?", 5, 120, 7)
     elseif state == 'won' then
-        print("very good, you won!, play again?", 1, 120, 7)
+        print("very good, you won!, play again?", 0, 120, 7)
     end
     -- if state != nil then
     --     printh("state= " .. state, 'debug.log', false)
