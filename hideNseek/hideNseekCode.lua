@@ -5,8 +5,6 @@
 -- on loose, hiden players reveal themselves
 -- daddy under table reveal is bad, needs to come out over carpet
 
--- DOING: make mummy
--- hook up mummy
 
 -- players can't be hiden in the same place
 -- sound effects
