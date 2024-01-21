@@ -8,6 +8,8 @@
 --     { x = 1, y = 32, toX = 16, toY = 32 },
 -- }
 --             'arla', 8, 0, 12, 16, 10, 90 - 16, {
+--             'daddy', 58, 0, 16, 32, 70, 90 - 32, {
+    --     add(players, init_player('mummy', 0, 35, 20, 28, 70, 90 - 32,{
 function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
     s = s or 1
 

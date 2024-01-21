@@ -45,7 +45,7 @@ function _init(s)
     )
     add(
         players, init_player(
-            'phoebe', 1, 16, 13, 14, 40, 90 - 14, {
+            'phoebe', 1, 16, 13, 14, 35, 90 - 14, {
                 { x = 3, y = 17, toX = 18, toY = 17 },
                 { x = 18, y = -2, toX = 18, toY = 17 },
                 { x = 3, y = 62, toX = 18, toY = 62 },
@@ -64,7 +64,7 @@ function _init(s)
 
     add(
         players, init_player(
-            'daddy', 58, 0, 17, 32, 70, 90 - 32, {
+            'daddy', 58, 0, 17, 32, 63, 90 - 31, {
                 -- daddy hiding places
                 { x = 47, y = 24, toX = 63, toY = 24 },
                 { x = 47, y = 41, toX = 47, toY = 24 },
@@ -76,15 +76,19 @@ function _init(s)
         )
     )
 
-    -- add(players, init_player('mummy', 56, 0, 17, 32, 70, 90 - 32,{
-    --     -- daddy hiding places
-    --     { x = 47, y = 24, toX = 63, toY = 24 },
-    --     { x = 47, y = 41, toX = 47, toY = 24 },
-    --     { x = 58, y = 97, toX = 58, toY = 62 },
-    --     { x = 111, y = 78, toX = 95, toY = 78 },
-    --     { x = 86, y = 39, toX = 104, toY = 39 },
-    --     { x = 1, y = 32, toX = 16, toY = 32 },
-    -- }))
+    add(
+        players, init_player(
+            'mummy', 0, 35, 21, 29, 90, 61, {
+                -- daddy hiding places
+                { x = 47, y = 24, toX = 63, toY = 24 },
+                { x = 47, y = 41, toX = 47, toY = 24 },
+                { x = 58, y = 97, toX = 58, toY = 62 },
+                { x = 111, y = 78, toX = 95, toY = 78 },
+                { x = 86, y = 39, toX = 104, toY = 39 },
+                { x = 1, y = 32, toX = 16, toY = 32 }
+            }
+        )
+    )
 end
 
 function _update()
