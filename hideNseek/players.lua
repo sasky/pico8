@@ -90,7 +90,7 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                 end
                 -- Hiding States
             elseif self.state == "reveal" then
-                -- todo, step though the reveal animation
+                -- step though the reveal animation
                 -- --     { x = 58, y = 97, toX = 58, toY = 62 },
                 overrideBounds = true
                 if self.hidingPlace.x < self.hidingPlace.toX then
@@ -120,13 +120,6 @@ function init_player(name, px, py, w, h, x, y, hidingPlaces, s)
                         state = 'won'
                     end
                 end
-            elseif self.state == "found" then
-                -- just stand there, maybe follow the active player
-                -- once I watch that AI course
-            elseif self.state == "hide" then
-                -- just hide I think
-            elseif self.state == "title" then
-                -- just hide I think
             end
             self.x += self.vx
             self.y += self.vy

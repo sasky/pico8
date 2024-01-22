@@ -6,30 +6,26 @@
 -- players can't be hiden in the same place
 -- sound effects
 -- export
+
 -- put up on website
 -- add heaps of code comments
 -- tidy up code
 
-function _init(s)
-    if s == nil then
-        s = 'title'
-    end
-    state = s
+function _init()
+    state = 'title'
     looks = 10
     players = {}
     selected_plr = 'select player'
     selected = 0
-    debug = true
     add(
         players, init_player(
             'daddy', 58, 0, 17, 32, 63, 90 - 31, {
-                -- daddy hiding places
                 { x = 47, y = 24, toX = 63, toY = 24 },
-                { x = 47, y = 41, toX = 47, toY = 24 },
+                { x = 47, y = 41, toX = 47, toY = 41 },
                 { x = 58, y = 97, toX = 58, toY = 62 },
-                { x = 111, y = 78, toX = 95, toY = 78 },
-                { x = 86, y = 39, toX = 104, toY = 39 },
-                { x = 0, y = 32, toX = 16, toY = 32 }
+                { x = 113, y = 78, toX = 95, toY = 78 },
+                { x = 86, y = 36, toX = 104, toY = 36 },
+                { x = 0, y = 30, toX = 16, toY = 30 }
             }
         )
     )
@@ -37,13 +33,12 @@ function _init(s)
     add(
         players, init_player(
             'mummy', 0, 35, 21, 29, 90, 61, {
-                -- daddy hiding places
-                { x = 47, y = 24, toX = 63, toY = 24 },
-                { x = 47, y = 41, toX = 47, toY = 24 },
+                { x = 42, y = 24, toX = 63, toY = 24 },
+                { x = 42, y = 41, toX = 63, toY = 41 },
                 { x = 58, y = 97, toX = 58, toY = 62 },
                 { x = 111, y = 78, toX = 95, toY = 78 },
-                { x = 86, y = 39, toX = 104, toY = 39 },
-                { x = 1, y = 32, toX = 16, toY = 32 }
+                { x = 82, y = 43, toX = 104, toY = 43 },
+                { x = -5, y = 37, toX = 16, toY = 37 }
             }
         )
     )
@@ -129,7 +124,8 @@ function _update()
         end
     elseif state == 'lost' or state == 'won' then
         for p in all(players) do
-            -- put all states in found, expect for people in hidin
+            -- put all states in lost, expect for people in hidden
+            -- hidden players need to reveal themselves
             if p.state == 'hide' or p.state == 'reveal' then
                 p.state = 'reveal'
             else
@@ -138,11 +134,8 @@ function _update()
             p:update()
         end
         if btnp(4) or btnp(5) then
-            _init('title')
+            _init()
         end
-    end
-    if debug then
-        -- printh("state: " .. state , 'debug.log',false)
     end
 end
 
@@ -167,6 +160,7 @@ function _draw()
                 map(16, 0, x, y)
             end
         end
+        -- draw the hiden players
         drawPlayers({ 'hide', 'reveal' })
         -- draw the furniture
         map()
@@ -183,9 +177,6 @@ function _draw()
     elseif state == 'won' then
         print("very good, you won!, play again?", 0, 120, 7)
     end
-    -- if state != nil then
-    --     printh("state= " .. state, 'debug.log', false)
-    -- end
 end
 
 function drawPlayers(states)
