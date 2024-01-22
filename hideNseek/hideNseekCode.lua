@@ -115,7 +115,7 @@ function _update()
             end
         else
             if btnp(0) or btnp(1) or btnp(4) or btnp(5) then
-                selected = 1
+                selected = 3 -- Arla is selected, she in in the third position
             end
         end
     elseif state == 'play' then
